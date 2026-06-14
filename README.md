@@ -4,6 +4,9 @@
 
 FilterTube is a Chrome Extension that helps users personalize their YouTube experience by filtering unwanted content, reducing distractions, and prioritizing videos that match their interests.
 
+<img width="756" height="1030" alt="Screenshot 2026-06-14 133657" src="https://github.com/user-attachments/assets/2e18fda7-3bcc-472f-af27-71c753787ce2" />
+
+
 ## ✨ Features
 
 ### 🔍 Keyword Filtering
