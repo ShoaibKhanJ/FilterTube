@@ -1,0 +1,90 @@
+/**
+ * FilterTube – Content Styles
+ * Injected into YouTube pages alongside the content script.
+ * Handles Focus Mode visual changes and smooth hide animations.
+ */
+
+/* ─── Focus Mode Styles ─────────────────────────────────────────────────────── */
+
+/* Hide right sidebar in focus mode (watch page) */
+html.filtertube-focus-mode #secondary,
+html.filtertube-focus-mode #related,
+html.filtertube-focus-mode ytd-watch-next-secondary-results-renderer {
+  display: none !important;
+}
+
+/* Expand main content to fill space when sidebar is hidden */
+html.filtertube-focus-mode #primary {
+  max-width: 100% !important;
+}
+
+html.filtertube-focus-mode ytd-watch-flexy[flexy][is-two-columns_] #primary.ytd-watch-flexy {
+  max-width: 100% !important;
+}
+
+/* Hide masthead notifications and account area in focus mode */
+html.filtertube-focus-mode ytd-masthead #end {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* ─── Filtered Video Animation ──────────────────────────────────────────────── */
+
+/* Elements being hidden get a smooth fade */
+[data-filtube="hidden"] {
+  opacity: 0 !important;
+  transform: scale(0.96) !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+/* ─── FilterTube Badge (optional indicator) ──────────────────────────────────── */
+
+/* Small badge shown on filtered pages - can be toggled */
+#filtertube-badge {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(18, 18, 18, 0.92);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  color: #fff;
+  font-family: 'YouTube Sans', 'Roboto', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  z-index: 9999;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+#filtertube-badge:hover {
+  opacity: 1;
+}
+
+#filtertube-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #22C55E;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px #22C55E;
+}
+
+/* ─── Shorts Hidden Placeholder ─────────────────────────────────────────────── */
+
+/* Smooth height collapse for hidden Shorts sections */
+ytd-reel-shelf-renderer[style*="display: none"],
+ytd-rich-shelf-renderer[is-shorts][style*="display: none"] {
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}

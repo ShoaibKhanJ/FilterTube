@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FilterTube</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- ─── App Shell ──────────────────────────────────────────────────── -->
+  <div class="app" id="app">
+
+    <!-- ─── Header ─────────────────────────────────────────────────────── -->
+    <header class="header">
+      <div class="header-brand">
+        <div class="logo">
+          <span class="logo-icon">▶</span>
+          <span class="logo-text">Filter<span class="logo-accent">Tube</span></span>
+        </div>
+        <span class="version-badge">v1.0</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-reset" title="Reset all settings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+        <div class="master-toggle-wrap">
+          <label class="toggle-switch sm" title="Enable/disable FilterTube">
+            <input type="checkbox" id="toggle-master" checked />
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <!-- ─── Status Bar ──────────────────────────────────────────────────── -->
+    <div class="status-bar" id="status-bar">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-text" id="status-text">Active on YouTube</span>
+    </div>
+
+    <!-- ─── Stats Row ───────────────────────────────────────────────────── -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-filter-count">0</span>
+        <span class="stat-label">Filter Words</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value accent-red" id="stat-block-count">0</span>
+        <span class="stat-label">Blocked Words</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value accent-green" id="stat-channel-count">0</span>
+        <span class="stat-label">Whitelisted</span>
+      </div>
+    </div>
+
+    <!-- ─── Tab Navigation ──────────────────────────────────────────────── -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="filters">Filters</button>
+      <button class="tab-btn" data-tab="blocked">Blocked</button>
+      <button class="tab-btn" data-tab="channels">Channels</button>
+      <button class="tab-btn" data-tab="settings">Settings</button>
+    </div>
+
+    <!-- ─── Tab Content ─────────────────────────────────────────────────── -->
+    <div class="tab-content">
+
+      <!-- FILTERS TAB -->
+      <div class="tab-pane active" id="tab-filters">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-icon">🎯</span>
+            <span>Filter Keywords</span>
+          </div>
+          <span class="section-hint">Show only matching videos</span>
+        </div>
+
+        <div class="input-row">
+          <input
+            type="text"
+            id="input-filter-keyword"
+            class="text-input"
+            placeholder="e.g. Python, AI, Web Dev..."
+            maxlength="60"
+          />
+          <button class="add-btn" id="btn-add-filter">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Add
+          </button>
+        </div>
+
+        <div class="chips-container" id="chips-filter">
+          <!-- Filter keyword chips rendered here -->
+        </div>
+
+        <div class="empty-state" id="empty-filter">
+          <span class="empty-icon">🔍</span>
+          <p>No filter keywords yet.</p>
+          <p class="empty-sub">Add keywords to show only matching videos.</p>
+        </div>
+      </div>
+
+      <!-- BLOCKED TAB -->
+      <div class="tab-pane" id="tab-blocked">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-icon">🚫</span>
+            <span>Blocked Keywords</span>
+          </div>
+          <span class="section-hint">Hide videos with these words</span>
+        </div>
+
+        <div class="input-row">
+          <input
+            type="text"
+            id="input-blocked-keyword"
+            class="text-input"
+            placeholder="e.g. Prank, Gossip, Drama..."
+            maxlength="60"
+          />
+          <button class="add-btn danger" id="btn-add-blocked">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Block
+          </button>
+        </div>
+
+        <div class="chips-container" id="chips-blocked">
+          <!-- Blocked keyword chips rendered here -->
+        </div>
+
+        <div class="empty-state" id="empty-blocked">
+          <span class="empty-icon">🛡️</span>
+          <p>No blocked keywords yet.</p>
+          <p class="empty-sub">Block keywords to never see matching videos.</p>
+        </div>
+      </div>
+
+      <!-- CHANNELS TAB -->
+      <div class="tab-pane" id="tab-channels">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-icon">⭐</span>
+            <span>Channel Whitelist</span>
+          </div>
+          <span class="section-hint">Always show these channels</span>
+        </div>
+
+        <div class="input-row">
+          <input
+            type="text"
+            id="input-channel"
+            class="text-input"
+            placeholder="e.g. freeCodeCamp, Fireship..."
+            maxlength="80"
+          />
+          <button class="add-btn success" id="btn-add-channel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Add
+          </button>
+        </div>
+
+        <div class="chips-container" id="chips-channels">
+          <!-- Channel whitelist chips rendered here -->
+        </div>
+
+        <div class="empty-state" id="empty-channels">
+          <span class="empty-icon">📺</span>
+          <p>No whitelisted channels yet.</p>
+          <p class="empty-sub">Whitelisted channels always appear regardless of filters.</p>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="tab-pane" id="tab-settings">
+
+        <!-- Toggle: Hide Shorts -->
+        <div class="setting-card">
+          <div class="setting-info">
+            <div class="setting-name">
+              <span class="setting-icon">⚡</span>
+              Hide YouTube Shorts
+            </div>
+            <div class="setting-desc">Remove Shorts shelves and recommendations from all pages</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-shorts" />
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+          </label>
+        </div>
+
+        <!-- Toggle: Focus Mode -->
+        <div class="setting-card">
+          <div class="setting-info">
+            <div class="setting-name">
+              <span class="setting-icon">🎯</span>
+              Focus Mode
+            </div>
+            <div class="setting-desc">Hide sidebar, trending, and distracting recommendations</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-focus" />
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+          </label>
+        </div>
+
+        <!-- Divider -->
+        <div class="settings-divider">
+          <span>Danger Zone</span>
+        </div>
+
+        <!-- Reset Button -->
+        <button class="reset-btn" id="btn-reset-all">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          Reset All Settings
+        </button>
+
+      </div>
+
+    </div><!-- /tab-content -->
+
+    <!-- ─── Footer ───────────────────────────────────────────────────────── -->
+    <footer class="footer">
+      <button class="save-btn" id="btn-save">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+        Save Settings
+      </button>
+      <div class="save-feedback" id="save-feedback">
+        <span>✓ Saved!</span>
+      </div>
+    </footer>
+
+  </div><!-- /app -->
+
+  <script src="popup.js"></script>
+</body>
+</html>
